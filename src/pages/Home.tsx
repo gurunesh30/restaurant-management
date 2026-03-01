@@ -1,34 +1,44 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
+import { ContainerScroll } from '../components/ui/container-scroll-animation';
 
 const Home = () => {
     return (
         <div className="home-page">
             {/* Hero Section */}
-            <section className="hero-section text-center">
-                <div className="hero-overlay"></div>
-                <Container className="position-relative z-1">
-                    <Row className="justify-content-center">
-                        <Col lg={8} md={10}>
-                            <span className="section-subtitle mb-3 fade-in d-inline-block">Experience Culinary Excellence</span>
-                            <h1 className="display-2 text-white fw-bold mb-4 brand-font text-shadow">
-                                The Grand Bistro
+            <section className="flex flex-col overflow-hidden pb-[100px] pt-[150px] bg-[var(--bg-dark)]">
+                <ContainerScroll
+                    titleComponent={
+                        <>
+                            <span className="section-subtitle mb-3 fade-in d-inline-block text-[var(--primary-color)]">Experience Culinary Excellence</span>
+                            <h1 className="text-4xl md:text-6xl font-semibold text-[var(--text-main)] mb-4 brand-font">
+                                The Grand <br />
+                                <span className="text-5xl md:text-[6rem] font-bold mt-1 leading-none text-black">
+                                    Bistro
+                                </span>
                             </h1>
-                            <p className="lead text-light mb-5 px-lg-5 fs-4">
+                            <p className="lead text-[var(--text-muted)] mt-5 mb-5 px-lg-5 fs-4 max-w-2xl mx-auto">
                                 A symphony of flavors, bridging the gap between digital browsing and unforgettable physical dining experiences.
                             </p>
-                            <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center mt-4">
+                            <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center mt-4 mb-20">
                                 <Link to="/reservation" className="btn btn-gold btn-lg text-uppercase px-5 py-3 shadow-lg text-decoration-none">
                                     Book a Table
                                 </Link>
-                                <Link to="/menu" className="btn btn-outline-gold btn-lg text-uppercase px-5 py-3 text-decoration-none">
-                                    View Menu <ArrowRight className="ms-2" size={20} />
+                                <Link to="/menu" className="btn btn-outline-gold btn-lg text-uppercase px-5 py-3 text-decoration-none bg-white">
+                                    View Menu <ArrowRight className="ms-2 d-inline" size={20} />
                                 </Link>
                             </div>
-                        </Col>
-                    </Row>
-                </Container>
+                        </>
+                    }
+                >
+                    <img
+                        src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80"
+                        alt="Restaurant Hero"
+                        className="mx-auto rounded-2xl object-cover h-full w-full object-center"
+                        draggable={false}
+                    />
+                </ContainerScroll>
             </section>
 
             {/* About Section */}
@@ -43,7 +53,7 @@ const Home = () => {
                                     className="img-fluid rounded shadow-lg"
                                     style={{ border: '2px solid rgba(212, 175, 55, 0.2)' }}
                                 />
-                                <div className="position-absolute bottom-0 end-0 p-4 bg-dark border" style={{ borderColor: 'var(--primary-color) !important', transform: 'translate(-20px, 20px)' }}>
+                                <div className="position-absolute bottom-0 end-0 p-4 bg-white border rounded shadow" style={{ borderColor: 'var(--primary-color) !important', transform: 'translate(-20px, 20px)' }}>
                                     <div className="d-flex align-items-center gap-2 mb-2 text-gold" style={{ color: 'var(--primary-color)' }}>
                                         <Star fill="currentColor" />
                                         <Star fill="currentColor" />
@@ -51,8 +61,8 @@ const Home = () => {
                                         <Star fill="currentColor" />
                                         <Star fill="currentColor" />
                                     </div>
-                                    <h5 className="brand-font mb-0 text-white">Award Winning</h5>
-                                    <p className="text-muted mb-0 small">Dining Experience</p>
+                                    <h5 className="brand-font mb-0 text-[var(--text-main)]">Award Winning</h5>
+                                    <p className="text-[var(--text-muted)] mb-0 small">Dining Experience</p>
                                 </div>
                             </div>
                         </Col>

@@ -19,7 +19,7 @@ const Navigation = () => {
             expand="lg"
             fixed="top"
             className={`custom-navbar ${scrolled ? 'shadow-sm' : ''}`}
-            data-bs-theme="dark"
+            data-bs-theme="light"
         >
             <Container>
                 <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center gap-2 brand-font">
