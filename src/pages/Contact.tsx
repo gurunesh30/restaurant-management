@@ -16,7 +16,7 @@ const Contact = () => {
                 <Row className="gy-5">
                     <Col lg={4}>
                         <div className="d-flex flex-column gap-4 pe-lg-4">
-                            <div className="p-4 bg-[var(--bg-light)] rounded border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] shadow-sm">
+                            <div className="p-4 bg-[var(--bg-light)] rounded-2xl border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] shadow-sm bg-blue-gradient hover-glow">
                                 <div className="d-flex gap-3 align-items-start mb-3 border-bottom border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] pb-3">
                                     <div className="bg-[var(--bg-dark)] p-2 rounded text-[var(--primary-color)]">
                                         <MapPin size={24} />
@@ -56,7 +56,7 @@ const Contact = () => {
                     </Col>
 
                     <Col lg={8}>
-                        <div className="bg-[var(--bg-light)] p-4 p-md-5 rounded shadow border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)]">
+                        <div className="bg-[var(--bg-light)] p-4 p-md-5 rounded-2xl shadow border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
                             <h3 className="brand-font mb-4 text-[var(--text-main)]">Send a Message</h3>
                             <Form onSubmit={(e: React.FormEvent) => e.preventDefault()}>
                                 <Row className="gy-4">

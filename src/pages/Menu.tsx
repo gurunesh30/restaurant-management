@@ -49,7 +49,7 @@ const Menu = () => {
                     <Row className="gy-4">
                         {filteredMenu.map((item) => (
                             <Col lg={6} key={item.id}>
-                                <div className="d-flex flex-column flex-sm-row gap-3 p-3 menu-card align-items-sm-center">
+                                <div className="d-flex flex-column flex-sm-row gap-3 p-3 menu-card align-items-sm-center rounded-2xl border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
                                     <div style={{ width: '120px', height: '120px', flexShrink: 0 }} className="overflow-hidden rounded">
                                         <img
                                             src={item.image_url}

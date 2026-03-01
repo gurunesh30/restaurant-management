@@ -32,7 +32,7 @@ const Home = () => {
                         </>
                     }
                 >
-                    <div className="h-full w-full bg-[var(--bg-light)] text-[var(--text-main)] rounded-2xl p-8 md:p-12 flex flex-col justify-center items-center text-center shadow-lg border border-border">
+                    <div className="h-full w-full bg-[var(--bg-light)] text-[var(--text-main)] rounded-2xl p-8 md:p-12 flex flex-col justify-center items-center text-center shadow-lg border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
                         <div className="max-w-3xl">
                             <h2 className="text-4xl md:text-5xl brand-font mb-6 border-b pb-4 border-[rgba(0,0,0,0.1)] inline-block">The Grand Bistro</h2>
                             <p className="text-xl md:text-2xl text-[var(--text-muted)] font-light leading-relaxed">
@@ -92,7 +92,7 @@ const Home = () => {
                 <Container>
                     <div className="mb-5">
                         <span className="section-subtitle mb-2">Signature Dishes</span>
-                        <h2 className="section-title">Chef's Recommendations</h2>
+                        <h2 className="section-title">Today's Special</h2>
                     </div>
                     <Row className="gy-4 mt-2">
                         {[
@@ -101,7 +101,7 @@ const Home = () => {
                             { title: "Chocolate Lava Cake", desc: "Warm Belgian chocolate cake with a molten center and vanilla bean ice cream.", price: "$14", img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&q=80" }
                         ].map((item, idx) => (
                             <Col md={4} key={idx}>
-                                <div className="menu-card h-100 p-3">
+                                <div className="menu-card h-100 p-3 rounded-2xl border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
                                     <div className="overflow-hidden rounded mb-3">
                                         <img src={item.img} alt={item.title} className="w-100" />
                                     </div>

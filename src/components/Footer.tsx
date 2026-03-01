@@ -4,35 +4,35 @@ import { Facebook, Instagram, Twitter, MapPin, Phone, Mail } from 'lucide-react'
 
 const Footer = () => {
     return (
-        <footer className="text-light">
+        <footer className="text-[var(--text-main)]">
             <Container>
                 <Row className="gy-4">
                     <Col lg={4} md={6}>
-                        <h4 className="brand-font text-gold mb-4" style={{ color: 'var(--primary-color)' }}>The Grand Bistro</h4>
-                        <p className="text-muted pe-lg-4">
+                        <h4 className="brand-font mb-4" style={{ color: 'var(--primary-color)' }}>The Grand Bistro</h4>
+                        <p className="text-[var(--text-muted)] pe-lg-4">
                             Experience the finest culinary creations in an atmosphere of elegant sophistication.
                             Where every meal is a celebration of taste and tradition.
                         </p>
                         <div className="d-flex gap-3 mt-4">
-                            <a href="#" className="text-muted hover-gold"><Facebook size={20} /></a>
-                            <a href="#" className="text-muted hover-gold"><Instagram size={20} /></a>
-                            <a href="#" className="text-muted hover-gold"><Twitter size={20} /></a>
+                            <a href="#" className="text-[var(--text-muted)] hover-gold"><Facebook size={20} /></a>
+                            <a href="#" className="text-[var(--text-muted)] hover-gold"><Instagram size={20} /></a>
+                            <a href="#" className="text-[var(--text-muted)] hover-gold"><Twitter size={20} /></a>
                         </div>
                     </Col>
 
                     <Col lg={2} md={6}>
                         <h5 className="mb-4">Quick Links</h5>
                         <ul className="list-unstyled d-flex flex-column gap-2 mb-0">
-                            <li><Link to="/" className="text-muted text-decoration-none">Home</Link></li>
-                            <li><Link to="/menu" className="text-muted text-decoration-none">Our Menu</Link></li>
-                            <li><Link to="/reservation" className="text-muted text-decoration-none">Book a Table</Link></li>
-                            <li><Link to="/contact" className="text-muted text-decoration-none">Contact Us</Link></li>
+                            <li><Link to="/" className="text-[var(--text-muted)] text-decoration-none">Home</Link></li>
+                            <li><Link to="/menu" className="text-[var(--text-muted)] text-decoration-none">Our Menu</Link></li>
+                            <li><Link to="/reservation" className="text-[var(--text-muted)] text-decoration-none">Book a Table</Link></li>
+                            <li><Link to="/contact" className="text-[var(--text-muted)] text-decoration-none">Contact Us</Link></li>
                         </ul>
                     </Col>
 
                     <Col lg={3} md={6}>
                         <h5 className="mb-4">Opening Hours</h5>
-                        <ul className="list-unstyled text-muted d-flex flex-column gap-2 mb-0">
+                        <ul className="list-unstyled text-[var(--text-muted)] d-flex flex-column gap-2 mb-0">
                             <li className="d-flex justify-content-between">
                                 <span>Mon - Thu:</span> <span>11:00 AM - 10:00 PM</span>
                             </li>
@@ -47,7 +47,7 @@ const Footer = () => {
 
                     <Col lg={3} md={6}>
                         <h5 className="mb-4">Contact Info</h5>
-                        <ul className="list-unstyled text-muted d-flex flex-column gap-3 mb-0">
+                        <ul className="list-unstyled text-[var(--text-muted)] d-flex flex-column gap-3 mb-0">
                             <li className="d-flex gap-3 align-items-start">
                                 <MapPin size={20} className="text-gold flex-shrink-0 mt-1" style={{ color: 'var(--primary-color)' }} />
                                 <span>123 Culinary Boulevard,<br />New York, NY 10001</span>
@@ -64,8 +64,8 @@ const Footer = () => {
                     </Col>
                 </Row>
 
-                <Row className="mt-5 pt-4 border-top border-secondary">
-                    <Col className="text-center text-muted">
+                <Row className="mt-5 pt-4 border-top border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)]">
+                    <Col className="text-center text-[var(--text-muted)]">
                         <p className="mb-0">&copy; {new Date().getFullYear()} The Grand Bistro. All rights reserved.</p>
                     </Col>
                 </Row>

@@ -295,3 +295,27 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(212, 175, 55, 0.5);
 }
+
+/* Custom Utilities */
+.bg-blue-gradient {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.08) 0%, var(--bg-light) 60%) !important;
+}
+
+.dark .bg-blue-gradient {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.04) 0%, var(--bg-light) 60%) !important;
+}
+
+.hover-glow {
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.4s ease;
+}
+
+.hover-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(96, 165, 250, 0.1) !important;
+  border-color: rgba(96, 165, 250, 0.2) !important;
+}
+
+.dark .hover-glow:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+  border-color: rgba(96, 165, 250, 0.15) !important;
+}

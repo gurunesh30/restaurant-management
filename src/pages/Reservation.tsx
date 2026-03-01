@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import { CalendarCheck, Users, Clock, User, Phone, Mail, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
-const TABLES = [
-    { id: 1, seats: 2, status: 'available', x: 20, y: 20 },
-    { id: 2, seats: 2, status: 'available', x: 20, y: 50 },
-    { id: 3, seats: 4, status: 'booked', x: 50, y: 20 },
-    { id: 4, seats: 4, status: 'available', x: 50, y: 50 },
-    { id: 5, seats: 6, status: 'available', x: 80, y: 35 },
-    { id: 6, seats: 2, status: 'available', x: 20, y: 80 },
-    { id: 7, seats: 4, status: 'available', x: 50, y: 80 },
-    { id: 8, seats: 8, status: 'booked', x: 80, y: 80 },
+interface TableData {
+    id: number;
+    seats: number;
+    status: 'available' | 'booked';
+    label: string;
+    x: number;
+    y: number;
+}
+
+const TABLES: TableData[] = [
+    { id: 1, seats: 2, status: 'available', label: 'T-01', x: 20, y: 30 },
+    { id: 2, seats: 2, status: 'available', label: 'T-02', x: 20, y: 70 },
+    { id: 3, seats: 4, status: 'booked', label: 'T-03', x: 50, y: 30 },
+    { id: 4, seats: 4, status: 'available', label: 'T-04', x: 50, y: 70 },
+    { id: 5, seats: 6, status: 'available', label: 'T-05', x: 80, y: 50 },
+    { id: 6, seats: 2, status: 'available', label: 'T-06', x: 50, y: 50 },
+    { id: 7, seats: 4, status: 'available', label: 'T-07', x: 35, y: 50 },
+    { id: 8, seats: 8, status: 'booked', label: 'T-08', x: 80, y: 80 },
 ];
 
 const Reservation = () => {
-    const [selectedTable, setSelectedTable] = useState<number | null>(null);
+    const [selectedTable, setSelectedTable] = useState<TableData | null>(null);
     const [formData, setFormData] = useState({
         customer_name: '',
         email: '',
@@ -34,256 +43,293 @@ const Reservation = () => {
         e.preventDefault();
         if (!selectedTable) return;
         setStatus('submitting');
-
-        // Simulate API call
         setTimeout(() => {
             setStatus('success');
-            // Hide the modal after success
             setTimeout(() => {
                 setStatus('idle');
                 setSelectedTable(null);
-                setFormData({
-                    customer_name: '',
-                    email: '',
-                    phone: '',
-                    date: '',
-                    time: '',
-                    special_requests: ''
-                });
+                setFormData({ customer_name: '', email: '', phone: '', date: '', time: '', special_requests: '' });
             }, 3000);
         }, 1500);
     };
 
-    const handleTableClick = (tableId: number, status: string) => {
-        if (status === 'available') {
-            setSelectedTable(tableId);
-            setStatus('idle'); // reset previous success if any
+    const handleTableClick = (table: TableData) => {
+        if (table.status === 'available') {
+            setSelectedTable(table);
+            setStatus('idle');
         }
     };
 
     return (
-        <div className="reservation-page min-h-screen py-20 mt-10 relative">
-            <Container className={selectedTable ? 'blur-sm transition-all duration-300 pointer-events-none' : 'transition-all duration-300'}>
-                <div className="text-center mb-10">
-                    <span className="section-subtitle mb-3 fade-in d-inline-block text-[var(--primary-color)]">Interactive Booking</span>
-                    <h1 className="section-title display-4 brand-font text-[var(--text-main)] mb-4">Select Your Table</h1>
-                    <p className="text-[var(--text-muted)] max-w-xl mx-auto text-lg pt-4 pb-2">
-                        Pick your preferred table from our floor plan below to begin your reservation.
-                    </p>
-                </div>
+        <div className="reservation-page" style={{ minHeight: '100vh', paddingTop: '120px', paddingBottom: '80px' }}>
 
-                <div className="relative w-full max-w-4xl mx-auto h-[600px] bg-[var(--bg-light)] border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] rounded-3xl shadow-2xl p-8 overflow-hidden">
-                    <div className="absolute top-6 left-6 flex gap-4 text-sm text-[var(--text-muted)] z-10">
-                        <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-green-500/20 border-2 border-green-500" /> Available</div>
-                        <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-full bg-red-500/20 border-2 border-red-500" /> Booked</div>
+            {/* ── Page content: header + table grid ── */}
+            <div style={{
+                filter: selectedTable ? 'blur(6px)' : 'none',
+                pointerEvents: selectedTable ? 'none' : 'auto',
+                transition: 'filter 0.3s ease'
+            }}>
+                <Container>
+                    <div className="text-center" style={{ marginBottom: '48px' }}>
+                        <span className="section-subtitle d-inline-block" style={{ color: 'var(--primary-color)', marginBottom: '12px' }}>Interactive Booking</span>
+                        <h1 className="section-title display-4 brand-font" style={{ color: 'var(--text-main)', marginBottom: '16px' }}>Select Your Table</h1>
+                        <p style={{ color: 'var(--text-muted)', maxWidth: '560px', margin: '0 auto', fontSize: '1.1rem' }}>
+                            Pick your preferred table from our floor plan below to begin your reservation.
+                        </p>
                     </div>
-                    {/* Interactive Floor Plan */}
-                    <div className="absolute inset-x-8 inset-y-20 border-2 border-dashed border-[var(--text-muted)] opacity-20 rounded-xl pointer-events-none"></div>
-                    <div className="absolute top-1/2 left-0 -translate-y-1/2 -ml-2 text-[var(--text-muted)] opacity-50 font-bold rotate-90 uppercase tracking-widest">Entrance</div>
 
-                    {TABLES.map((table) => (
-                        <motion.button
-                            key={table.id}
-                            whileHover={table.status === 'available' ? { scale: 1.05 } : {}}
-                            whileTap={table.status === 'available' ? { scale: 0.95 } : {}}
-                            onClick={() => handleTableClick(table.id, table.status)}
-                            className={`absolute flex flex-col items-center justify-center rounded-full transition-colors shadow-lg
-                                ${table.status === 'available'
-                                    ? 'bg-green-500/10 border-2 border-green-500 hover:bg-green-500 hover:text-white cursor-pointer text-green-700 dark:text-green-400'
-                                    : 'bg-red-500/10 border-2 border-red-500 cursor-not-allowed opacity-60 text-red-700 dark:text-red-400'}
-                            `}
-                            style={{
-                                left: `${table.x}%`,
-                                top: `${table.y}%`,
-                                width: table.seats > 4 ? '100px' : '80px',
-                                height: table.seats > 4 ? '100px' : '80px',
-                                transform: 'translate(-50%, -50%)' // center it on the coordinate
-                            }}
-                            title={`Table ${table.id} (${table.seats} seats) - ${table.status}`}
-                        >
-                            <span className="font-bold text-lg">T{table.id}</span>
-                            <span className="text-xs opacity-80 flex items-center gap-1"><Users size={12} />{table.seats}</span>
-                        </motion.button>
-                    ))}
-                </div>
-            </Container>
+                    {/* Legend */}
+                    <div className="d-flex justify-content-center gap-4 mb-4" style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                        <div className="d-flex align-items-center gap-2">
+                            <div style={{ width: 14, height: 14, borderRadius: 4, border: '2px solid #60a5fa', background: 'rgba(96,165,250,0.1)' }} />
+                            Available
+                        </div>
+                        <div className="d-flex align-items-center gap-2">
+                            <div style={{ width: 14, height: 14, borderRadius: 4, border: '2px solid #a1a1aa', background: 'rgba(161,161,170,0.15)' }} />
+                            Booked
+                        </div>
+                    </div>
 
-            {/* Booking Overlay Modal */}
+                    {/* ── Table Grid ── */}
+                    <Row className="g-4 justify-content-center" style={{ maxWidth: '900px', margin: '0 auto' }}>
+                        {TABLES.map((table) => {
+                            const isAvailable = table.status === 'available';
+                            return (
+                                <Col xs={6} sm={4} md={3} key={table.id}>
+                                    <div
+                                        onClick={() => handleTableClick(table)}
+                                        style={{
+                                            position: 'relative',
+                                            width: '100%',
+                                            paddingTop: '75%', /* aspect ratio */
+                                            borderRadius: '16px',
+                                            border: isAvailable ? '2px solid rgba(96,165,250,0.5)' : '2px solid rgba(161,161,170,0.3)',
+                                            background: isAvailable ? 'var(--bg-light)' : 'var(--bg-darker)',
+                                            cursor: isAvailable ? 'pointer' : 'not-allowed',
+                                            opacity: isAvailable ? 1 : 0.5,
+                                            transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
+                                            boxShadow: isAvailable ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
+                                            overflow: 'hidden',
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (isAvailable) {
+                                                e.currentTarget.style.borderColor = '#60a5fa';
+                                                e.currentTarget.style.boxShadow = '0 4px 20px rgba(96,165,250,0.15)';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (isAvailable) {
+                                                e.currentTarget.style.borderColor = 'rgba(96,165,250,0.5)';
+                                                e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)';
+                                            }
+                                        }}
+                                    >
+                                        {/* Top accent bar */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0, left: 0, right: 0,
+                                            height: '4px',
+                                            borderRadius: '16px 16px 0 0',
+                                            background: isAvailable ? '#60a5fa' : '#a1a1aa',
+                                        }} />
+
+                                        {/* Content */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            inset: 0,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '6px',
+                                        }}>
+                                            <span style={{ fontWeight: 700, fontSize: '1.15rem', color: 'var(--text-main)' }}>{table.label}</span>
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '4px',
+                                                fontSize: '0.7rem',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.05em',
+                                                fontWeight: 600,
+                                                color: 'var(--text-muted)',
+                                                background: 'var(--bg-dark)',
+                                                padding: '3px 10px',
+                                                borderRadius: '100px',
+                                            }}>
+                                                <Users size={10} style={{ color: isAvailable ? '#60a5fa' : '#a1a1aa' }} />
+                                                {table.seats} Seats
+                                            </div>
+                                            {!isAvailable && (
+                                                <span style={{ fontSize: '0.65rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>Reserved</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Col>
+                            );
+                        })}
+                    </Row>
+                </Container>
+            </div>
+
+            {/* ── Booking Popup Overlay ── */}
             <AnimatePresence>
                 {selectedTable && (
                     <motion.div
-                        initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 pt-20"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        style={{
+                            position: 'fixed', inset: 0, zIndex: 1050,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            padding: '24px',
+                        }}
                     >
-                        <div className="absolute inset-0 bg-black/40 backdrop-blur-md" onClick={() => setSelectedTable(null)}></div>
+                        {/* Dim backdrop */}
+                        <div
+                            onClick={() => setSelectedTable(null)}
+                            style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)' }}
+                        />
 
-                        <div className="relative w-full max-w-2xl bg-[var(--bg-light)] p-8 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.3)] border border-border overflow-y-auto max-h-[90vh]">
+                        {/* Popup Card */}
+                        <motion.div
+                            initial={{ y: 40, scale: 0.96 }}
+                            animate={{ y: 0, scale: 1 }}
+                            exit={{ y: 20, scale: 0.97 }}
+                            transition={{ duration: 0.25, ease: 'easeOut' }}
+                            style={{
+                                position: 'relative',
+                                width: '100%',
+                                maxWidth: '640px',
+                                maxHeight: '90vh',
+                                overflowY: 'auto',
+                                background: 'var(--bg-light)',
+                                borderRadius: '24px',
+                                padding: '32px',
+                                boxShadow: '0 25px 60px rgba(0,0,0,0.25)',
+                                border: '1px solid rgba(128,128,128,0.15)',
+                            }}
+                        >
+                            {/* Close button */}
                             <button
                                 onClick={() => setSelectedTable(null)}
-                                className="absolute top-6 right-6 p-2 rounded-full hover:bg-[var(--bg-dark)] transition-colors text-[var(--text-muted)]"
+                                style={{
+                                    position: 'absolute', top: '20px', right: '20px',
+                                    background: 'none', border: 'none', cursor: 'pointer',
+                                    color: 'var(--text-muted)', padding: '4px', borderRadius: '50%',
+                                }}
                             >
-                                <X size={24} />
+                                <X size={22} />
                             </button>
 
-                            <div className="mb-8">
-                                <h2 className="text-3xl brand-font text-[var(--text-main)] mb-2">Complete Reservation</h2>
-                                <p className="text-[var(--text-muted)]">You're booking Table {selectedTable} (Seats: {TABLES.find(t => t.id === selectedTable)?.seats})</p>
+                            {/* Header with table info */}
+                            <div style={{
+                                marginBottom: '28px', padding: '16px 20px',
+                                background: 'var(--bg-dark)', borderRadius: '16px',
+                                border: '1px solid rgba(128,128,128,0.1)',
+                            }}>
+                                <h2 className="brand-font" style={{ color: 'var(--text-main)', fontSize: '1.6rem', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <CalendarCheck size={22} style={{ color: 'var(--primary-color)' }} />
+                                    Book {selectedTable.label}
+                                </h2>
+                                <div style={{ display: 'flex', gap: '20px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Users size={14} style={{ color: '#60a5fa' }} /> {selectedTable.seats} Seats</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><Clock size={14} style={{ color: 'var(--primary-color)' }} /> Instant Confirmation</span>
+                                </div>
                             </div>
 
                             {status === 'success' && (
-                                <Alert variant="success" className="d-flex align-items-center gap-2 border-0 bg-green-500/10 text-green-600 dark:text-green-400 mb-6">
-                                    <CalendarCheck size={24} />
-                                    <div>
-                                        <strong>Success!</strong> Your table is booked for {formData.date} at {formData.time}. Redirecting...
-                                    </div>
+                                <Alert variant="success" className="d-flex align-items-center gap-2 border-0 mb-4" style={{ background: 'rgba(96,165,250,0.1)', color: '#2563eb' }}>
+                                    <CalendarCheck size={20} />
+                                    <div><strong>Booked!</strong> Your table is confirmed for {formData.date} at {formData.time}.</div>
                                 </Alert>
                             )}
-
                             {status === 'error' && (
-                                <Alert variant="danger" className="mb-6">
-                                    An error occurred while booking. Please try again later.
-                                </Alert>
+                                <Alert variant="danger" className="mb-4">An error occurred. Please try again.</Alert>
                             )}
 
+                            {/* Form */}
                             <Form onSubmit={handleSubmit}>
-                                <Row className="gy-4">
+                                <Row className="gy-3">
                                     <Col md={6}>
-                                        <Form.Group>
-                                            <Form.Label className="d-flex align-items-center gap-2 text-[var(--text-main)] fw-bold mb-2">
-                                                <User size={16} /> Full Name
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="customer_name"
-                                                value={formData.customer_name}
-                                                onChange={handleChange}
-                                                required
-                                                placeholder="John Doe"
-                                                className="bg-[var(--bg-dark)] border-border text-[var(--text-main)] p-3 rounded-xl focus:ring-2 focus:ring-[var(--primary-color)]"
-                                            />
-                                        </Form.Group>
+                                        <Form.Label style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <User size={14} /> Full Name
+                                        </Form.Label>
+                                        <Form.Control type="text" name="customer_name" value={formData.customer_name} onChange={handleChange} required placeholder="John Doe"
+                                            style={{ background: 'var(--bg-dark)', border: '1px solid rgba(128,128,128,0.15)', color: 'var(--text-main)', padding: '10px 14px', borderRadius: '12px' }} />
                                     </Col>
-
                                     <Col md={6}>
-                                        <Form.Group>
-                                            <Form.Label className="d-flex align-items-center gap-2 text-[var(--text-main)] fw-bold mb-2">
-                                                <Mail size={16} /> Email Address
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="email"
-                                                name="email"
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                required
-                                                placeholder="john@example.com"
-                                                className="bg-[var(--bg-dark)] border-border text-[var(--text-main)] p-3 rounded-xl focus:ring-2 focus:ring-[var(--primary-color)]"
-                                            />
-                                        </Form.Group>
+                                        <Form.Label style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Mail size={14} /> Email
+                                        </Form.Label>
+                                        <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="john@example.com"
+                                            style={{ background: 'var(--bg-dark)', border: '1px solid rgba(128,128,128,0.15)', color: 'var(--text-main)', padding: '10px 14px', borderRadius: '12px' }} />
                                     </Col>
-
                                     <Col md={6}>
-                                        <Form.Group>
-                                            <Form.Label className="d-flex align-items-center gap-2 text-[var(--text-main)] fw-bold mb-2">
-                                                <Phone size={16} /> Phone Number
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="tel"
-                                                name="phone"
-                                                value={formData.phone}
-                                                onChange={handleChange}
-                                                required
-                                                placeholder="(555) 123-4567"
-                                                className="bg-[var(--bg-dark)] border-border text-[var(--text-main)] p-3 rounded-xl focus:ring-2 focus:ring-[var(--primary-color)]"
-                                            />
-                                        </Form.Group>
+                                        <Form.Label style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Phone size={14} /> Phone
+                                        </Form.Label>
+                                        <Form.Control type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="(555) 123-4567"
+                                            style={{ background: 'var(--bg-dark)', border: '1px solid rgba(128,128,128,0.15)', color: 'var(--text-main)', padding: '10px 14px', borderRadius: '12px' }} />
                                     </Col>
-
                                     <Col md={6}>
-                                        <Form.Group>
-                                            <Form.Label className="d-flex align-items-center gap-2 text-[var(--text-main)] fw-bold mb-2">
-                                                <CalendarCheck size={16} /> Date
-                                            </Form.Label>
-                                            <Form.Control
-                                                type="date"
-                                                name="date"
-                                                value={formData.date}
-                                                onChange={handleChange}
-                                                required
-                                                min={new Date().toISOString().split('T')[0]}
-                                                className="bg-[var(--bg-dark)] border-border text-[var(--text-main)] p-3 rounded-xl focus:ring-2 focus:ring-[var(--primary-color)] [&::-webkit-calendar-picker-indicator]:dark:invert"
-                                            />
-                                        </Form.Group>
+                                        <Form.Label style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <CalendarCheck size={14} /> Date
+                                        </Form.Label>
+                                        <Form.Control type="date" name="date" value={formData.date} onChange={handleChange} required min={new Date().toISOString().split('T')[0]}
+                                            style={{ background: 'var(--bg-dark)', border: '1px solid rgba(128,128,128,0.15)', color: 'var(--text-main)', padding: '10px 14px', borderRadius: '12px' }} />
                                     </Col>
-
                                     <Col md={6}>
-                                        <Form.Group>
-                                            <Form.Label className="d-flex align-items-center gap-2 text-[var(--text-main)] fw-bold mb-2">
-                                                <Clock size={16} /> Time
-                                            </Form.Label>
-                                            <Form.Select
-                                                name="time"
-                                                value={formData.time}
-                                                onChange={handleChange}
-                                                required
-                                                className="bg-[var(--bg-dark)] border-border text-[var(--text-main)] p-3 rounded-xl focus:ring-2 focus:ring-[var(--primary-color)]"
-                                            >
-                                                <option value="">Select Time</option>
-                                                <option value="17:00">5:00 PM</option>
-                                                <option value="17:30">5:30 PM</option>
-                                                <option value="18:00">6:00 PM</option>
-                                                <option value="18:30">6:30 PM</option>
-                                                <option value="19:00">7:00 PM</option>
-                                                <option value="19:30">7:30 PM</option>
-                                                <option value="20:00">8:00 PM</option>
-                                                <option value="20:30">8:30 PM</option>
-                                                <option value="21:00">9:00 PM</option>
-                                                <option value="21:30">9:30 PM</option>
-                                            </Form.Select>
-                                        </Form.Group>
+                                        <Form.Label style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Clock size={14} /> Time
+                                        </Form.Label>
+                                        <Form.Select name="time" value={formData.time} onChange={handleChange} required
+                                            style={{ background: 'var(--bg-dark)', border: '1px solid rgba(128,128,128,0.15)', color: 'var(--text-main)', padding: '10px 14px', borderRadius: '12px' }}>
+                                            <option value="">Select Time</option>
+                                            <option value="17:00">5:00 PM</option>
+                                            <option value="17:30">5:30 PM</option>
+                                            <option value="18:00">6:00 PM</option>
+                                            <option value="18:30">6:30 PM</option>
+                                            <option value="19:00">7:00 PM</option>
+                                            <option value="19:30">7:30 PM</option>
+                                            <option value="20:00">8:00 PM</option>
+                                            <option value="20:30">8:30 PM</option>
+                                            <option value="21:00">9:00 PM</option>
+                                            <option value="21:30">9:30 PM</option>
+                                        </Form.Select>
                                     </Col>
-
                                     <Col md={6}>
-                                        {/* Display only, tied to table */}
-                                        <Form.Group>
-                                            <Form.Label className="d-flex align-items-center gap-2 text-[var(--text-main)] fw-bold mb-2">
-                                                <Users size={16} /> Table Capacity
-                                            </Form.Label>
-                                            <div className="bg-[var(--bg-dark)] border border-border text-[var(--text-muted)] p-3 rounded-xl">
-                                                {TABLES.find(t => t.id === selectedTable)?.seats} Guests Max
-                                            </div>
-                                        </Form.Group>
+                                        <Form.Label style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Users size={14} /> Capacity
+                                        </Form.Label>
+                                        <div style={{ background: 'var(--bg-dark)', border: '1px solid rgba(128,128,128,0.15)', color: 'var(--text-muted)', padding: '10px 14px', borderRadius: '12px' }}>
+                                            {selectedTable.seats} Guests Max
+                                        </div>
                                     </Col>
-
                                     <Col xs={12}>
-                                        <Form.Group>
-                                            <Form.Label className="text-[var(--text-main)] fw-bold mb-2">Special Requests (Optional)</Form.Label>
-                                            <Form.Control
-                                                as="textarea"
-                                                rows={3}
-                                                name="special_requests"
-                                                value={formData.special_requests}
-                                                onChange={handleChange}
-                                                placeholder="Allergies, anniversaries, preferred seating..."
-                                                className="bg-[var(--bg-dark)] border-border text-[var(--text-main)] p-3 rounded-xl focus:ring-2 focus:ring-[var(--primary-color)]"
-                                            />
-                                        </Form.Group>
+                                        <Form.Label style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '0.85rem' }}>Special Requests (Optional)</Form.Label>
+                                        <Form.Control as="textarea" rows={2} name="special_requests" value={formData.special_requests} onChange={handleChange}
+                                            placeholder="Allergies, anniversaries, preferred seating..."
+                                            style={{ background: 'var(--bg-dark)', border: '1px solid rgba(128,128,128,0.15)', color: 'var(--text-main)', padding: '10px 14px', borderRadius: '12px' }} />
                                     </Col>
-
-                                    <Col xs={12} className="text-center mt-6">
-                                        <Button
-                                            type="submit"
-                                            className="btn-gold btn-lg w-full py-4 text-uppercase fw-bold shadow-lg rounded-xl text-lg hover:bg-transparent hover:text-[var(--primary-color)]"
-                                            disabled={status === 'submitting'}
-                                            style={{ backgroundColor: 'var(--primary-color)', color: 'white', borderColor: 'var(--primary-color)' }}
+                                    <Col xs={12} className="mt-3">
+                                        <Button type="submit" disabled={status === 'submitting'}
+                                            style={{
+                                                width: '100%', padding: '14px', fontWeight: 700, fontSize: '1rem',
+                                                textTransform: 'uppercase', letterSpacing: '0.05em', borderRadius: '14px',
+                                                background: 'var(--primary-color)', color: '#fff', border: '2px solid var(--primary-color)',
+                                                transition: 'all 0.25s ease',
+                                            }}
+                                            onMouseEnter={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--primary-color)'; }}
+                                            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--primary-color)'; e.currentTarget.style.color = '#fff'; }}
                                         >
                                             {status === 'submitting' ? 'Confirming...' : 'Confirm Reservation'}
                                         </Button>
                                     </Col>
                                 </Row>
                             </Form>
-                        </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
