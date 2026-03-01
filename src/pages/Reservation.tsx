@@ -97,32 +97,15 @@ const Reservation = () => {
                             return (
                                 <Col xs={6} sm={4} md={3} key={table.id}>
                                     <div
-                                        onClick={() => handleTableClick(table)}
+                                        className={`rounded-2xl border ${isAvailable ? 'border-[rgba(96,165,250,0.5)] bg-blue-gradient hover-glow' : 'border-[rgba(161,161,170,0.3)] bg-[var(--bg-darker)]'} shadow-sm overflow-hidden`}
                                         style={{
                                             position: 'relative',
                                             width: '100%',
                                             paddingTop: '75%', /* aspect ratio */
-                                            borderRadius: '16px',
-                                            border: isAvailable ? '2px solid rgba(96,165,250,0.5)' : '2px solid rgba(161,161,170,0.3)',
-                                            background: isAvailable ? 'var(--bg-light)' : 'var(--bg-darker)',
                                             cursor: isAvailable ? 'pointer' : 'not-allowed',
                                             opacity: isAvailable ? 1 : 0.5,
-                                            transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
-                                            boxShadow: isAvailable ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
-                                            overflow: 'hidden',
                                         }}
-                                        onMouseEnter={(e) => {
-                                            if (isAvailable) {
-                                                e.currentTarget.style.borderColor = '#60a5fa';
-                                                e.currentTarget.style.boxShadow = '0 4px 20px rgba(96,165,250,0.15)';
-                                            }
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            if (isAvailable) {
-                                                e.currentTarget.style.borderColor = 'rgba(96,165,250,0.5)';
-                                                e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)';
-                                            }
-                                        }}
+                                        onClick={() => handleTableClick(table)}
                                     >
                                         {/* Top accent bar */}
                                         <div style={{

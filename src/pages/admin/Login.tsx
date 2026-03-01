@@ -24,22 +24,22 @@ const AdminLogin = () => {
             <Container>
                 <Row className="justify-content-center">
                     <Col md={6} lg={5} xl={4}>
-                        <div className="bg-light p-4 p-md-5 rounded shadow border" style={{ borderColor: 'rgba(212,175,55,0.2)' }}>
+                        <div className="bg-[var(--bg-light)] p-4 p-md-5 rounded-2xl shadow border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
                             <div className="text-center mb-4">
-                                <div className="bg-dark d-inline-block p-3 rounded-circle mb-3" style={{ color: 'var(--primary-color)' }}>
+                                <div className="bg-[var(--bg-dark)] d-inline-block p-3 rounded-circle mb-3 text-[var(--primary-color)]">
                                     <Lock size={32} />
                                 </div>
-                                <h3 className="brand-font text-white">Admin Login</h3>
-                                <p className="text-muted small">Secure Access Dashboard</p>
+                                <h3 className="brand-font text-[var(--text-main)]">Admin Login</h3>
+                                <p className="text-[var(--text-muted)] small">Secure Access Dashboard</p>
                             </div>
 
                             {error && <Alert variant="danger" className="small">{error}</Alert>}
 
                             <Form onSubmit={handleLogin}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="text-muted fw-bold small">Username</Form.Label>
+                                    <Form.Label className="text-[var(--text-muted)] fw-bold small">Username</Form.Label>
                                     <div className="input-group">
-                                        <span className="input-group-text bg-dark border-secondary text-muted"><User size={16} /></span>
+                                        <span className="input-group-text bg-[var(--bg-dark)] border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] text-[var(--text-muted)]"><User size={16} /></span>
                                         <Form.Control
                                             type="text"
                                             className="border-start-0"
@@ -52,9 +52,9 @@ const AdminLogin = () => {
                                 </Form.Group>
 
                                 <Form.Group className="mb-4">
-                                    <Form.Label className="text-muted fw-bold small">Password</Form.Label>
+                                    <Form.Label className="text-[var(--text-muted)] fw-bold small">Password</Form.Label>
                                     <div className="input-group">
-                                        <span className="input-group-text bg-dark border-secondary text-muted"><Lock size={16} /></span>
+                                        <span className="input-group-text bg-[var(--bg-dark)] border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] text-[var(--text-muted)]"><Lock size={16} /></span>
                                         <Form.Control
                                             type="password"
                                             className="border-start-0"

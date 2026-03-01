@@ -42,7 +42,7 @@ const Navigation = () => {
 
             <button
                 onClick={toggleTheme}
-                className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-[#222222] shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:shadow-[0_0_15px_rgba(0,0,0,0.5)] text-[var(--text-main)] transition-all hover:scale-110 border border-border"
+                className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-[var(--bg-light)] shadow-[0_4px_15px_rgba(0,0,0,0.1)] text-[var(--text-main)] transition-all border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow"
                 aria-label="Toggle Theme"
             >
                 {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}

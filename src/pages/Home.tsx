@@ -57,7 +57,7 @@ const Home = () => {
                                     className="img-fluid rounded shadow-lg"
                                     style={{ border: '2px solid rgba(212, 175, 55, 0.2)' }}
                                 />
-                                <div className="position-absolute bottom-0 end-0 p-4 bg-white border rounded shadow" style={{ borderColor: 'var(--primary-color) !important', transform: 'translate(-20px, 20px)' }}>
+                                <div className="position-absolute bottom-0 end-0 p-4 bg-[var(--bg-light)] border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] rounded-2xl shadow-lg bg-blue-gradient hover-glow" style={{ transform: 'translate(-20px, 20px)' }}>
                                     <div className="d-flex align-items-center gap-2 mb-2 text-gold" style={{ color: 'var(--primary-color)' }}>
                                         <Star fill="currentColor" />
                                         <Star fill="currentColor" />
