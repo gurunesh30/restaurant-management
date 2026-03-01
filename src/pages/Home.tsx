@@ -32,12 +32,16 @@ const Home = () => {
                         </>
                     }
                 >
-                    <img
-                        src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80"
-                        alt="Restaurant Hero"
-                        className="mx-auto rounded-2xl object-cover h-full w-full object-center"
-                        draggable={false}
-                    />
+                    <div className="h-full w-full bg-[var(--bg-light)] text-[var(--text-main)] rounded-2xl p-8 md:p-12 flex flex-col justify-center items-center text-center shadow-lg border border-border">
+                        <div className="max-w-3xl">
+                            <h2 className="text-4xl md:text-5xl brand-font mb-6 border-b pb-4 border-[rgba(0,0,0,0.1)] inline-block">The Grand Bistro</h2>
+                            <p className="text-xl md:text-2xl text-[var(--text-muted)] font-light leading-relaxed">
+                                Welcome to a place where tradition meets innovation. At The Grand Bistro, we source only the finest local ingredients to create unforgettable culinary experiences.
+                                <br /><br />
+                                Est. 1985
+                            </p>
+                        </div>
+                    </div>
                 </ContainerScroll>
             </section>
 

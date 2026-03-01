@@ -21,6 +21,17 @@
   --transition: all 0.3s ease;
 }
 
+:root[data-theme="dark"],
+.dark {
+  --primary-color: #6c757d;
+  --primary-hover: #868e96;
+  --bg-dark: #121212;
+  --bg-darker: #0a0a0a;
+  --bg-light: #1e1e1e;
+  --text-main: #fbfbfb;
+  --text-muted: #a0a5b1;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -142,6 +153,10 @@ a {
   background: linear-gradient(rgba(240, 240, 240, 0.7), rgba(240, 240, 240, 0.9));
 }
 
+.dark .hero-section {
+  background: linear-gradient(rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9));
+}
+
 .hero-overlay {
   position: absolute;
   top: 0;
@@ -165,6 +180,10 @@ a {
   overflow: hidden;
   height: 100%;
   border-radius: 8px;
+}
+
+.dark .menu-card {
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .menu-card:hover {
@@ -199,12 +218,23 @@ a {
   padding: 0.75rem 1rem;
 }
 
+.dark .form-control,
+.dark .form-select {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .form-control:focus,
 .form-select:focus {
   background-color: rgba(0, 0, 0, 0.05);
   border-color: var(--primary-color);
   color: var(--text-main);
   box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.25);
+}
+
+.dark .form-control:focus,
+.dark .form-select:focus {
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .form-label {
@@ -241,6 +271,10 @@ footer {
   background-color: var(--bg-darker);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   padding: 4rem 0 2rem;
+}
+
+.dark footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* Custom scrollbar */
