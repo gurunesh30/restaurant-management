@@ -139,33 +139,33 @@ const AdminDashboard = () => {
 
                             {activeTab === 'reservations' && (
                                 <div className="table-responsive">
-                                    <Table className="align-middle border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] text-[var(--text-main)]" style={{ color: 'var(--text-main)' }} hover>
+                                    <Table className="align-middle text-[var(--text-main)]" style={{ color: 'var(--text-main)', '--bs-table-bg': 'transparent', '--bs-table-hover-bg': 'rgba(139,157,195,0.06)' } as React.CSSProperties} hover>
                                         <thead>
-                                            <tr className="border-bottom border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)]">
-                                                <th className="py-3">ID</th>
-                                                <th className="py-3">Customer Name</th>
-                                                <th className="py-3">Date</th>
-                                                <th className="py-3">Time</th>
-                                                <th className="py-3">Guests</th>
-                                                <th className="py-3">Status</th>
-                                                <th className="py-3">Action</th>
+                                            <tr style={{ borderBottom: '1px solid rgba(128,128,128,0.15)' }}>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>ID</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Customer Name</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Date</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Time</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Guests</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Status</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {dummyReservations.map(res => (
-                                                <tr key={res.id}>
-                                                    <td>#{res.id + 1000}</td>
-                                                    <td className="fw-bold">{res.name}</td>
-                                                    <td>{res.date}</td>
-                                                    <td>{res.time}</td>
-                                                    <td>{res.guests}</td>
+                                                <tr key={res.id} style={{ color: 'var(--text-main)', borderBottom: '1px solid rgba(128,128,128,0.08)' }}>
+                                                    <td style={{ color: 'var(--text-muted)' }}>#{res.id + 1000}</td>
+                                                    <td className="fw-bold" style={{ color: 'var(--text-main)' }}>{res.name}</td>
+                                                    <td style={{ color: 'var(--text-main)' }}>{res.date}</td>
+                                                    <td style={{ color: 'var(--text-main)' }}>{res.time}</td>
+                                                    <td style={{ color: 'var(--text-main)' }}>{res.guests}</td>
                                                     <td>
                                                         <Badge bg={res.status === 'Confirmed' ? 'success' : 'warning'} text="dark">
                                                             {res.status}
                                                         </Badge>
                                                     </td>
                                                     <td>
-                                                        <Button size="sm" variant="outline-light" className="me-2 text-white">View</Button>
+                                                        <Button size="sm" variant="outline-secondary" className="me-2" style={{ color: 'var(--text-main)', borderColor: 'rgba(128,128,128,0.3)' }}>View</Button>
                                                         <Button size="sm" variant="outline-danger">Cancel</Button>
                                                     </td>
                                                 </tr>
@@ -177,21 +177,21 @@ const AdminDashboard = () => {
 
                             {activeTab === 'menu' && (
                                 <div className="table-responsive">
-                                    <Table className="align-middle border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] text-[var(--text-main)]" hover>
+                                    <Table className="align-middle text-[var(--text-main)]" style={{ color: 'var(--text-main)', '--bs-table-bg': 'transparent', '--bs-table-hover-bg': 'rgba(139,157,195,0.06)' } as React.CSSProperties} hover>
                                         <thead>
-                                            <tr className="border-bottom border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)]">
-                                                <th className="py-3">Dish Name</th>
-                                                <th className="py-3">Description</th>
-                                                <th className="py-3">Price</th>
-                                                <th className="py-3">Category</th>
-                                                <th className="py-3">Actions</th>
+                                            <tr style={{ borderBottom: '1px solid rgba(128,128,128,0.15)' }}>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Dish Name</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Description</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Price</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Category</th>
+                                                <th className="py-3" style={{ color: 'var(--text-muted)' }}>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {menuItems.map((item: MenuItem) => (
-                                                <tr key={item.id} className="border-bottom border-[rgba(0,0,0,0.05)] dark:border-[rgba(255,255,255,0.05)]">
-                                                    <td className="fw-bold">{item.name}</td>
-                                                    <td className="text-[var(--text-muted)] small" style={{ maxWidth: '300px' }}>{item.description}</td>
+                                                <tr key={item.id} style={{ borderBottom: '1px solid rgba(128,128,128,0.06)' }}>
+                                                    <td className="fw-bold" style={{ color: 'var(--text-main)' }}>{item.name}</td>
+                                                    <td style={{ maxWidth: '300px', color: 'var(--text-muted)' }} className="small">{item.description}</td>
                                                     <td className="text-[var(--primary-color)] fw-bold">{item.price}</td>
                                                     <td><Badge bg="secondary" className="fw-normal">{item.category}</Badge></td>
                                                     <td>
