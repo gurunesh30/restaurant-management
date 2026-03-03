@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
+import RouteLoader from './components/RouteLoader';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import Reservation from './pages/Reservation';
@@ -12,6 +13,7 @@ function App() {
   return (
     <div className="d-flex flex-column min-vh-100">
       <Navigation />
+      <RouteLoader />
       <main className="flex-grow-1">
         <Routes>
           <Route path="/" element={<Home />} />

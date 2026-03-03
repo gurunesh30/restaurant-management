@@ -443,3 +443,102 @@ footer a:hover {
   background-color: var(--primary-color) !important;
   color: #fff !important;
 }
+
+/* ──────── Route Loader – Animated Fork & Knife ──────── */
+.route-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  pointer-events: all;
+}
+
+.route-loader-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cutlery-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  color: var(--primary-color);
+}
+
+.cutlery {
+  animation-duration: 0.8s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  transform-origin: bottom center;
+}
+
+.cutlery.fork {
+  animation-name: fork-rock;
+}
+
+.cutlery.knife {
+  animation-name: knife-rock;
+}
+
+@keyframes fork-rock {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-20deg);
+  }
+
+  75% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes knife-rock {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(20deg);
+  }
+
+  75% {
+    transform: rotate(-8deg);
+  }
+}
+
+/* ──────── Dark Mode – Home Page Text Fixes ──────── */
+.dark .home-page .section-title,
+.dark .home-page h2,
+.dark .home-page h4 {
+  color: var(--text-main) !important;
+}
+
+.dark .home-page .section-subtitle {
+  color: var(--primary-color) !important;
+}
+
+.dark .home-page .lead,
+.dark .home-page p {
+  color: var(--text-muted) !important;
+}
+
+.dark .home-page .btn-outline-gold {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.dark .home-page .btn-outline-gold:hover {
+  color: #fff !important;
+  background-color: var(--primary-color) !important;
+}
