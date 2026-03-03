@@ -1,27 +1,45 @@
-import { useState } from 'react';
-import { Container, Row, Col, Nav, Badge } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Container, Row, Col, Nav, Badge, Spinner, Button } from 'react-bootstrap';
+import { menuApi } from '../lib/api';
 
-const dummyMenu = [
-    // Appetizers
-    { id: 1, name: "Crispy Calamari", description: "Lightly dusted with smoked paprika, served with lemon aioli.", price: "$16.00", category: "Appetizers", image_url: "https://images.unsplash.com/photo-1599487405270-b0fa93f669cc?auto=format&fit=crop&q=80", is_available: true },
-    { id: 2, name: "Bruschetta Tower", description: "Heirloom tomatoes, fresh basil, garlic, and balsamic glaze on toasted sourdough.", price: "$12.00", category: "Appetizers", image_url: "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?auto=format&fit=crop&q=80", is_available: true },
-    { id: 3, name: "Beef Carpaccio", description: "Thinly sliced raw beef tenderloin, arugula, capers, and Grana Padano.", price: "$19.00", category: "Appetizers", image_url: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80", is_available: true },
-    // Mains
-    { id: 4, name: "Pan-Seared Salmon", description: "Wild-caught salmon with asparagus, quinoa, and lemon-dill sauce.", price: "$34.00", category: "Mains", image_url: "https://images.unsplash.com/photo-1485921325833-c519f76c4927?auto=format&fit=crop&q=80", is_available: true },
-    { id: 5, name: "Classic Filet Mignon", description: "Grass-fed 8oz filet, roasted garlic mash, and red wine reduction.", price: "$48.00", category: "Mains", image_url: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&q=80", is_available: true },
-    { id: 6, name: "Wild Mushroom Risotto", description: "Arborio rice, porcini mushrooms, truffle oil, and parmesan crisp.", price: "$26.00", category: "Mains", image_url: "https://images.unsplash.com/photo-1590453535234-7a329fa03db5?auto=format&fit=crop&q=80", is_available: true },
-    // Desserts
-    { id: 7, name: "Tiramisu Classico", description: "Espresso-soaked ladyfingers, mascarpone cream, and cocoa powder.", price: "$12.00", category: "Desserts", image_url: "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?auto=format&fit=crop&q=80", is_available: true },
-    { id: 8, name: "Lemon Basil Tart", description: "Crisp pastry shell filled with tangy lemon curd and fresh basil.", price: "$10.00", category: "Desserts", image_url: "https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&q=80", is_available: true }
-];
+interface MenuItem {
+    _id: string;
+    name: string;
+    description: string;
+    price: number;
+    category: string;
+    image_url: string;
+    is_available: boolean;
+}
 
 const Menu = () => {
     const [activeTab, setActiveTab] = useState("Appetizers");
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const categories = ["Appetizers", "Mains", "Desserts"];
+    const categories = ["Appetizers", "Mains", "Desserts", "Beverages"];
+
+    useEffect(() => {
+        const fetchMenu = async () => {
+            try {
+                setLoading(true);
+                const response = await menuApi.getAll();
+                setMenuItems(response.data);
+                setError(null);
+            } catch (err: any) {
+                console.error('Error fetching menu:', err);
+                setError('Failed to load menu. Please try again later.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMenu();
+    }, []);
 
     // Filter items based on selected category
-    const filteredMenu = dummyMenu.filter(item => item.category === activeTab);
+    const filteredMenu = menuItems.filter(item => item.category === activeTab);
 
     return (
         <div className="menu-page">
@@ -46,37 +64,51 @@ const Menu = () => {
                         ))}
                     </Nav>
 
-                    <Row className="gy-4">
-                        {filteredMenu.map((item) => (
-                            <Col lg={6} key={item.id}>
-                                <div className="d-flex flex-column flex-sm-row gap-3 p-3 menu-card align-items-sm-center rounded-2xl border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
-                                    <div style={{ width: '120px', height: '120px', flexShrink: 0 }} className="overflow-hidden rounded">
-                                        <img
-                                            src={item.image_url}
-                                            alt={item.name}
-                                            className="w-100 h-100 object-fit-cover"
-                                            style={{ objectFit: 'cover' }}
-                                        />
-                                    </div>
-                                    <div className="flex-grow-1 text-start">
-                                        <div className="d-flex justify-content-between align-items-center mb-2 border-bottom border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] pb-2">
-                                            <h4 className="brand-font mb-0 text-[var(--text-main)] d-flex align-items-center gap-2">
-                                                {item.name}
-                                                {!item.is_available && <Badge bg="danger" className="fs-6 fw-normal ms-2">Sold Out</Badge>}
-                                            </h4>
-                                            <span className="price-tag fs-5">{item.price}</span>
-                                        </div>
-                                        <p className="text-[var(--text-muted)] mb-0 lh-sm">{item.description}</p>
-                                    </div>
-                                </div>
-                            </Col>
-                        ))}
-                    </Row>
-
-                    {filteredMenu.length === 0 && (
-                        <div className="text-center py-5 text-muted">
-                            <p>No items found in this category.</p>
+                    {loading ? (
+                        <div className="text-center py-5">
+                            <Spinner animation="border" variant="gold" />
+                            <p className="mt-3 text-muted">Loading our delicious menu...</p>
                         </div>
+                    ) : error ? (
+                        <div className="text-center py-5 text-danger">
+                            <p>{error}</p>
+                            <Button variant="outline-gold" onClick={() => window.location.reload()}>Retry</Button>
+                        </div>
+                    ) : (
+                        <>
+                            <Row className="gy-4">
+                                {filteredMenu.map((item) => (
+                                    <Col lg={6} key={item._id}>
+                                        <div className="d-flex flex-column flex-sm-row gap-3 p-3 menu-card align-items-sm-center rounded-2xl border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
+                                            <div style={{ width: '120px', height: '120px', flexShrink: 0 }} className="overflow-hidden rounded">
+                                                <img
+                                                    src={item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80'}
+                                                    alt={item.name}
+                                                    className="w-100 h-100 object-fit-cover"
+                                                    style={{ objectFit: 'cover' }}
+                                                />
+                                            </div>
+                                            <div className="flex-grow-1 text-start">
+                                                <div className="d-flex justify-content-between align-items-center mb-2 border-bottom border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] pb-2">
+                                                    <h4 className="brand-font mb-0 text-[var(--text-main)] d-flex align-items-center gap-2">
+                                                        {item.name}
+                                                        {!item.is_available && <Badge bg="danger" className="fs-6 fw-normal ms-2">Sold Out</Badge>}
+                                                    </h4>
+                                                    <span className="price-tag fs-5">${item.price.toFixed(2)}</span>
+                                                </div>
+                                                <p className="text-[var(--text-muted)] mb-0 lh-sm">{item.description}</p>
+                                            </div>
+                                        </div>
+                                    </Col>
+                                ))}
+                            </Row>
+
+                            {filteredMenu.length === 0 && (
+                                <div className="text-center py-5 text-muted">
+                                    <p>No items found in this category.</p>
+                                </div>
+                            )}
+                        </>
                     )}
                 </Container>
             </div>

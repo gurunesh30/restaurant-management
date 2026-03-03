@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { CalendarCheck, Users, Clock, User, Phone, Mail, X, ChefHat, Wifi, Music, Wine, Layers, Star, Utensils } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Timeline } from '../components/ui/timeline';
+import { reservationApi } from '../lib/api';
 
 /* ─────────────────── Types ─────────────────── */
 
@@ -322,27 +323,78 @@ const Reservation = () => {
     const [selectedTable, setSelectedTable] = useState<TableData | null>(null);
     const [selectedFloor, setSelectedFloor] = useState<FloorData | null>(null);
     const [formData, setFormData] = useState({
-        customer_name: '', email: '', phone: '', date: '', time: '', special_requests: ''
+        customer_name: '', email: '', phone: '', date: new Date().toISOString().split('T')[0], time: '', special_requests: '', guests: 2
     });
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+    const [existingReservations, setExistingReservations] = useState<any[]>([]);
+    const [loadingReservations, setLoadingReservations] = useState(false);
+
+    useEffect(() => {
+        const fetchReservations = async () => {
+            if (!formData.date) return;
+            try {
+                setLoadingReservations(true);
+                const response = await reservationApi.getAll({ date: formData.date });
+                setExistingReservations(response.data);
+            } catch (err: any) {
+                const errMsg = err.response?.data?.message || err.response?.data?.error || err.message;
+                console.error('Error fetching reservations:', errMsg, err.response?.data);
+            } finally {
+                setLoadingReservations(false);
+            }
+        };
+
+        fetchReservations();
+    }, [formData.date]);
+
+    // Computed floors with real-time status
+    const currentFloors = FLOORS.map(floor => ({
+        ...floor,
+        tables: floor.tables.map(table => {
+            const isBooked = existingReservations.some(res =>
+                res.table_id === table.id &&
+                res.status !== 'Cancelled'
+            );
+            return {
+                ...table,
+                status: isBooked ? 'booked' : 'available' as 'booked' | 'available'
+            };
+        })
+    }));
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selectedTable) return;
+        if (!selectedTable || !selectedFloor) return;
+
         setStatus('submitting');
-        setTimeout(() => {
+        try {
+            await reservationApi.create({
+                ...formData,
+                table_id: selectedTable.id,
+                floor: selectedFloor.name,
+                guests: selectedTable.seats // Use table's seat count or form data
+            });
+
             setStatus('success');
+            // Refresh reservations
+            const response = await reservationApi.getAll({ date: formData.date });
+            setExistingReservations(response.data);
+
             setTimeout(() => {
                 setStatus('idle');
                 setSelectedTable(null);
                 setSelectedFloor(null);
-                setFormData({ customer_name: '', email: '', phone: '', date: '', time: '', special_requests: '' });
+                setFormData({ ...formData, customer_name: '', email: '', phone: '', special_requests: '', time: '' });
             }, 3000);
-        }, 1500);
+        } catch (err: any) {
+            const errMsg = err.response?.data?.message || err.response?.data?.error || err.message;
+            console.error('Error creating reservation:', errMsg, err.response?.data);
+            setStatus('error');
+        }
     };
 
     const handleTableSelect = (table: TableData, floor: FloorData) => {
@@ -354,7 +406,7 @@ const Reservation = () => {
     };
 
     /* Build timeline: title = sticky floor label, content = table grid */
-    const timelineData = FLOORS.map((floor) => ({
+    const timelineData = currentFloors.map((floor) => ({
         title: <FloorLabel floor={floor} />,
         content: (
             <TableGrid
@@ -399,6 +451,12 @@ const Reservation = () => {
                         >
                             Scroll through each floor — the details stick on the left as you browse tables on the right.
                         </motion.p>
+                        {loadingReservations && (
+                            <div className="d-flex align-items-center justify-content-center gap-2 mt-3 text-[var(--primary-color)]">
+                                <Spinner animation="border" size="sm" />
+                                <span className="small fw-bold">Updating availability...</span>
+                            </div>
+                        )}
                     </Container>
                 </div>
 

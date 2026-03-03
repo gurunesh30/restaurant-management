@@ -1,10 +1,13 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 /**
  * Database configuration.
  * Uses environment variables with sensible defaults.
  */
 const dbConfig = {
     /** MongoDB connection URI */
-    uri: process.env.MONGO_URI || 'mongodb://localhost:27017/restraunt',
+    uri: process.env.MONGO_URI,
 
     /** Connection pool options */
     options: {

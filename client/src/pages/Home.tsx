@@ -1,9 +1,37 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 import { ContainerScroll } from '../components/ui/container-scroll-animation';
+import { menuApi } from '../lib/api';
+
+interface MenuItem {
+    _id: string;
+    name: string;
+    description: string;
+    price: number;
+    image_url: string;
+}
 
 const Home = () => {
+    const [featuredItems, setFeaturedItems] = useState<MenuItem[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchFeatured = async () => {
+            try {
+                const response = await menuApi.getAll();
+                // Just take the first 3 items for simplicity, or filter by a 'featured' flag if you add one later
+                setFeaturedItems(response.data.slice(0, 3));
+            } catch (err) {
+                console.error('Error fetching featured items:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchFeatured();
+    }, []);
+
     return (
         <div className="home-page">
             {/* Hero Section */}
@@ -94,26 +122,33 @@ const Home = () => {
                         <span className="section-subtitle mb-2">Signature Dishes</span>
                         <h2 className="section-title">Today's Special</h2>
                     </div>
-                    <Row className="gy-4 mt-2">
-                        {[
-                            { title: "Truffle Ribeye", desc: "Prime cut ribeye with black truffle butter and roasted heirloom carrots.", price: "$45", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80" },
-                            { title: "Seared Scallops", desc: "Pan-seared jumbo scallops over sweet corn purée with crisp pancetta.", price: "$32", img: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&q=80" },
-                            { title: "Chocolate Lava Cake", desc: "Warm Belgian chocolate cake with a molten center and vanilla bean ice cream.", price: "$14", img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&q=80" }
-                        ].map((item, idx) => (
-                            <Col md={4} key={idx}>
-                                <div className="menu-card h-100 p-3 rounded-2xl border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
-                                    <div className="overflow-hidden rounded mb-3">
-                                        <img src={item.img} alt={item.title} className="w-100" />
+                    {loading ? (
+                        <div className="text-center py-5">
+                            <Spinner animation="border" variant="gold" />
+                        </div>
+                    ) : (
+                        <Row className="gy-4 mt-2">
+                            {featuredItems.map((item) => (
+                                <Col md={4} key={item._id}>
+                                    <div className="menu-card h-100 p-3 rounded-2xl border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] bg-blue-gradient hover-glow">
+                                        <div className="overflow-hidden rounded mb-3" style={{ height: '220px' }}>
+                                            <img src={item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80'} alt={item.name} className="w-100 h-100 object-fit-cover" />
+                                        </div>
+                                        <div className="d-flex justify-content-between align-items-center mb-2">
+                                            <h4 className="brand-font mb-0 text-[var(--text-main)]">{item.name}</h4>
+                                            <span className="price-tag">${item.price.toFixed(2)}</span>
+                                        </div>
+                                        <p className="text-[var(--text-muted)] mb-0 small">{item.description}</p>
                                     </div>
-                                    <div className="d-flex justify-content-between align-items-center mb-2">
-                                        <h4 className="brand-font mb-0">{item.title}</h4>
-                                        <span className="price-tag">{item.price}</span>
-                                    </div>
-                                    <p className="text-[var(--text-muted)] mb-0">{item.desc}</p>
-                                </div>
-                            </Col>
-                        ))}
-                    </Row>
+                                </Col>
+                            ))}
+                            {featuredItems.length === 0 && (
+                                <Col xs={12} className="text-center text-muted">
+                                    No specials today. Check our full menu!
+                                </Col>
+                            )}
+                        </Row>
+                    )}
                     <div className="text-center mt-5">
                         <Link to="/menu" className="btn btn-gold text-decoration-none">View Full Menu</Link>
                     </div>

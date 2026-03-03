@@ -12,15 +12,15 @@ const connectDB = async (uri, options = {}) => {
         serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 45000,
         ...options,
-    };
 
+    };
     console.log('📦 Attempting MongoDB connection...');
     console.log(`   URI: ${uri.replace(/\/\/.*@/, '//<credentials>@')}`);
 
     try {
         const conn = await mongoose.connect(uri, defaultOptions);
 
-        console.log(`✅ MongoDB connected successfully`);
+        console.log('✅ Connected to MongoDB successfully!');
         console.log(`   Host:     ${conn.connection.host}`);
         console.log(`   Database: ${conn.connection.name}`);
         console.log(`   Port:     ${conn.connection.port}`);
@@ -48,9 +48,10 @@ const connectDB = async (uri, options = {}) => {
 
         return conn;
     } catch (err) {
-        console.error(`\n❌ MongoDB initial connection FAILED`);
-        console.error(`   Error:   ${err.message}`);
-        console.error(`   Code:    ${err.code || 'N/A'}`);
+        console.error('❌ CONNECTION ERROR DETAILS:');
+        console.error('Message:', err.message);
+        console.error('Code:', err.code);
+
         if (err.reason) console.error(`   Reason:  ${JSON.stringify(err.reason)}`);
         console.error(`   Stack:   ${err.stack}`);
         console.error(`\n💡 Troubleshooting:`);
